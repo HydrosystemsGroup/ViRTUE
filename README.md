@@ -28,6 +28,3 @@ To start ViRTUE, begin an R session and run the following commands:
 library(shiny)
 runApp(“/path to ViRTUE folder”)
 
-##**License**
-
-ViRTUE is licensed under…
