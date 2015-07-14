@@ -15,7 +15,7 @@ ViRTUE is an R/Shiny web application for assessing risks to small-scale water su
 This repository contains the code and data requirements for the application of ViRTUE. 
 The live version of this site is available here: https://virtue.shinyapps.io/myapp
 
-##**Local Installation/ Requirements**
+##**Local Installation/Requirements**
 ViRTUE requires R version 2.15 or later. For best results, use the latest version of R. 
 
 To install R and RStudio Desktop go to: https://www.rstudio.com/products/rstudio/download/ 
