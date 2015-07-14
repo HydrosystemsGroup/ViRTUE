@@ -21,9 +21,9 @@ ViRTUE requires R version 2.15 or later. For best results, use the latest versio
 To install R and RStudio Desktop go to: https://www.rstudio.com/products/rstudio/download/ 
 
 ViRTUE depends on several R packages. To install them, run the following commands from within R.
-*install.packages(c(“shiny”, “ncdf”, “mnormt”, “MASS”, “zoo”, “maps”, “mapproj”, “psych”, “fields”, “plotrix”, “chron”))
+* install.packages(c(“shiny”, “ncdf”, “mnormt”, “MASS”, “zoo”, “maps”, “mapproj”, “psych”, “fields”, “plotrix”, “chron”))
 
 To start ViRTUE, begin an R session and run the following commands:
-*library(shiny)
-*runApp(“/path to ViRTUE folder”)
+* library(shiny)
+* runApp(“/path to ViRTUE folder”)
 
