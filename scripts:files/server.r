@@ -102,8 +102,6 @@ output$plot_wgen <- renderPlot({
   if (is.null(values$markers))
   return(NULL)
   num_year <- 62 #Figure out a way to remove this eventually
-  #wd <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/New_England/" #Directory where to grab climate files
-  #setwd(wd)
   filelist <- list.files(pattern="data_")  
   x <- as.numeric(substring(filelist,6,12))
   y <- as.numeric(substring(filelist,14,21))
@@ -208,8 +206,6 @@ output$plot_hydrograph <- renderPlot({
     })    
     
       num_year <- 62 #Figure out a way to remove this eventually
-      #wd <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/New_England/" #Directory where to grab climate files
-      #setwd(wd)
       filelist <- list.files(pattern="data_")    
       x <- as.numeric(substring(filelist,6,12))
       y <- as.numeric(substring(filelist,14,21))
@@ -234,9 +230,7 @@ output$plot_hydrograph <- renderPlot({
     source("ABCDE_SCE_CALIBRATE.r")
     source("ABCDE_QEST.r")
     source("BASIN_CLIMATE_AVERAGING.r")
-     
- 	#wd <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/New_England/" 
- 
+
     CLIMATE_DATA <- BASIN_CLIMATE_AVERAGING(climateData)
     PRCP <- CLIMATE_DATA[,3]
     TMAX <- CLIMATE_DATA[,4]
@@ -295,7 +289,6 @@ output$plot_hydrograph <- renderPlot({
    	EP <- 1-(m/length(log_Q))
    	plot(EP,sortt,type="l",xlab="Exceedance Probability",ylab="Streamflow (mm per month)")
    	lines(EP,sort(log_pred,decreasing=TRUE),col="red")
-	  #axis(1, at=1:624,labels=EP,tick=FALSE)
    	title(paste("Comparison of Flow Duration Curves"))
 	  legend("topright",c("Historic","Modeled"),col=c("black","red"),lty=c(1,1),lwd=c(2.5,2.5))
    
@@ -320,7 +313,6 @@ output$downloadHydro <- downloadHandler(
    
    	plot(EP,sortt,type="l",xlab="Exceedance Probability",ylab="Streamflow (mm per month)")
    	lines(EP,sort(log_pred,decreasing=TRUE),col="red")
-	  #axis(1, at=1:624,labels=EP,tick=FALSE)
    	title(paste("Comparison of Flow Duration Curves"))
 	  legend("topright",c("Historic","Modeled"),col=c("black","red"),lty=c(1,1),lwd=c(2.5,2.5))
    
@@ -332,15 +324,13 @@ output$downloadHydro <- downloadHandler(
    	PREDICTED_FLOW_FINAL <- ABCDE_QEST(parameters=FINAL_PARM,P=PRCP,PE=PE,T=TEMP,calib_num=length(PRCP))
 
 	####################################CREATE FINAL INFLOW SCENARIOS#######################################################
-	#final_flow_dir <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/FINAL_INFLOWS/"
-    ####################################################################
+
 	prcp <- rep(seq(0.75,1.25,by=0.05),11)
 	temp <- sort(rep(seq(0,5,by=0.5),11))
 	total_number_changes <- length(prcp)
 
 	for (i in 1:total_number_changes){
 		k <- paste("PRCP_MEAN_CHANGES_",prcp[i],"_TEMP_CHANGES_",temp[i],sep="")
-		#wd <- paste(k,"/",k,sep="")
 		TEMP <- read.table(k)[,4]
 		PRCP <- read.table(k)[,3]
 		
@@ -433,7 +423,6 @@ output$plot <- renderPlot({
     TEMPP <- as.numeric(input$temperature)
     PRCPP <- as.numeric(input$precipitation)
     
-    #swd <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/FINAL_INFLOWS/"
     filename <- paste("INFLOWS_TEMP_",TEMPP,"_PRCP_",PRCPP,".txt",sep="")
     filename_BASE <- paste("INFLOWS_TEMP_",0,"_PRCP_",1,".txt",sep="")
     
@@ -441,8 +430,6 @@ output$plot <- renderPlot({
     INFLOW_BASE <- read.table(paste(filename_BASE,sep=""),header=TRUE)
     
     #########################################SIMULATION MODEL##############################################
-    #ADDITIONAL INPUTS THAT SHOULD EVENTUALLY BE GENERALIZED
-   
     STORAGE_CAPACITY <- input$cc                     #Capacity of reservoir...this can change
     total_number_changes <- length(list.files(pattern="INFLOWS_"))	 #number of climate changes...this can change
     
@@ -499,22 +486,7 @@ output$plot <- renderPlot({
       
       #PERFORMANCE METRICS#
       POR_RELIABILITY <- 1 - sum(SHORTFALL)/sim_length
-      # VULNERABILITY_PERC <- mean(SHORTFALL_MAGNITUDE_PERC)
-      # VULNERABILITY <- mean(SHORTFALL_MAGNITUDE)
-      
-      # if(VULNERABILITY_PERC < 0){
-      # 	VULNERABILITY_PERC <- 0
-      # }else{
-      # 	VULNERABILITY_PERC <- VULNERABILITY_PERC
-      # }
-      
-      # if(VULNERABILITY < 0){
-      # 	VULNERABILITY <- 0
-      # }else{
-      # 	VULNERABILITY <- VULNERABILITY
-      # }
-      
-      
+
       #RUN SIMULATION BASE
       RESERVOIR_STORAGE_BASE <- array(0,c(sim_length))				#Reservoir Storage (mg)
       RELEASES_BASE <- array(0,c(sim_length))					    #Reservoir Release (mg)
@@ -549,29 +521,13 @@ output$plot <- renderPlot({
       
       #PERFORMANCE METRICS#
       POR_RELIABILITY_BASE <- 1 - sum(SHORTFALL_BASE)/sim_length
-	  # VULNERABILITY_BASE_PERC <- mean(SHORTFALL_BASE_MAGNITUDE_PERC)
-	  # VULNERABILITY_BASE <- mean(SHORTFALL_BASE_MAGNITUDE)
- 	  
- 	 #  if(VULNERABILITY_BASE_PERC < 0){
- 	 #  	VULNERABILITY_BASE_PERC <- 0
- 	 #  }else{
- 	 #  	VULNERABILITY_BASE_PERC <- VULNERABILITY_BASE_PERC
- 	 #  }
- 	  
- 	 #  if(VULNERABILITY_BASE < 0){
- 	 #  	VULNERABILITY_BASE <- 0
- 	 #  }else{
- 	 #  	VULNERABILITY_BASE <- VULNERABILITY_BASE
- 	 #  }
-      
+
     } else {
 
       #HEDGE
       isolate({source("Hedge.r",local=TRUE)})
       HEDGE <- Hedge(num_year)
 
-      # isolate({source("~/ShinyApps/myapp/UW_Reservoir_Rules.r",local=TRUE)})
-      # HEDGE <- UW_Hedge(num_year)
       STOR_NORM <- HEDGE[[1]]
       STOR_MOD <- HEDGE[[2]]
       
@@ -641,21 +597,7 @@ output$plot <- renderPlot({
       
       POR_RELIABILITY <- 1 - sum(SHORTFALL)/sim_length
       TOTAL_RELEASES <- RELEASES + SPILL
-      # VULNERABILITY_PERC <- mean(SHORTFALL_MAGNITUDE_PERC)
-      # VULNERABILITY <- mean(SHORTFALL_MAGNITUDE)
-      
-      # if(VULNERABILITY_PERC < 0){
-      # 	VULNERABILITY_PERC <- 0
-      # }else{
-      # 	VULNERABILITY_PERC <- VULNERABILITY_PERC
-      # }
-      
-      # if(VULNERABILITY < 0){
-      # 	VULNERABILITY <- 0
-      # }else{
-      # 	VULNERABILITY <- VULNERABILITY
-      # }
-      
+
       ##HEDGE FOR BASE CASE
       RESERVOIR_STORAGE_BASE <- array(0,c(sim_length))				#Cobble Mountain Storage (mg)
       RELEASES_BASE <- array(0,c(sim_length))					    #Cobble Mountain Release (mg); Just for water supply
@@ -718,20 +660,6 @@ output$plot <- renderPlot({
       
       POR_RELIABILITY_BASE <- 1 - sum(SHORTFALL_BASE)/sim_length
       TOTAL_RELEASES_BASE <- RELEASES_BASE + SPILL_BASE
-	  # VULNERABILITY_BASE_PERC <- mean(SHORTFALL_BASE_MAGNITUDE_PERC)
-	  # VULNERABILITY_BASE <- mean(SHORTFALL_BASE_MAGNITUDE)
-	  
-	  # if(VULNERABILITY_BASE_PERC < 0){
-	  # 	VULNERABILITY_BASE_PERC <- 0
-	  # }else{
-	  # 	VULNERABILITY_BASE_PERC <- VULNERABILITY_BASE_PERC
-	  # }
-	  
-	  # if(VULNERABILITY_BASE < 0){
-	  # 	VULNERABILITY_BASE <- 0
-	  # }else{
-	  # 	VULNERABILITY_BASE <- VULNERABILITY_BASE
-	  # }
 
     }
     ##################################COMPUTING MAXIMUM AND MINIMUM FLOWS##########################################
@@ -742,7 +670,6 @@ output$plot <- renderPlot({
     MAX_FLOW <- array(0,12)
     MIN_FLOW <- array(10^10,12)
     for (i in 1:total_number_changes) {
-      #TO_AGG <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/FINAL_INFLOWS/"
       cur_flow_name <- paste("INFLOWS_TEMP_",temp[i],"_PRCP_",prcp[i],".txt",sep="")
       READ_IN <- paste(cur_flow_name,sep="")
       CUR_FLOW <- read.table(READ_IN,header=TRUE)[,1]
@@ -782,7 +709,6 @@ output$plot <- renderPlot({
     PRESENT_MEAN_MONTHLY_FLOW <- aggregate(INFLOWS,by=list(MONTH_SIM),FUN=mean)
     HIST_MEAN_MONTHLY_FLOW <- aggregate(INFLOWS_BASE,by=list(MONTH_SIM),FUN=mean)
     
-    #use of p,t,pp, and tt are not related to temp and precip but instead to base case vs. not (confusing notation)
     t_change <- cbind(YEAR_SIM,MONTH_SIM,INFLOWS)
     CHANGING_ANNUAL_MONTHLY_STORAGE <- aggregate(t_change[,3],by=list(t_change[,2]),FUN=mean,na.rm=TRUE)
     FOR_PLOTTING_FLOWS <- t_change[which(t_change[,2]==input$storage_month),3]
@@ -803,31 +729,6 @@ output$plot <- renderPlot({
     MONTH_LIST <- c("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
     
     par(mfrow=c(3,2))
-#     dial <- function(x, min=0, max=1){
-#       old.par <- par(pty='s', lend=1)
-#       on.exit(par(old.par))
-#       plot(0,0, pch=16, cex=5, ann=FALSE, xaxt='n', yaxt='n', xlab='',
-#            ylab='',xlim=c(-1,1), ylim=c(-1,1) )
-#       title(paste("WATER SUPPLY VULNERABILITY (%)\n",round(VULNERABILITY_PERC,2)),cex.main=2)
-#       tmp.theta <- seq( -1/3*pi, 4/3*pi, length=11 )
-#       segments( 0.9 * cos(tmp.theta), 0.9 * sin(tmp.theta),
-#                 cos(tmp.theta), sin(tmp.theta) )
-#       tmp.theta <- seq(4/3*pi, 3/4*pi, length=100)
-#       lines( cos(tmp.theta), sin(tmp.theta), col='grey', lwd=6 )
-#       tmp.theta <- seq(3/4*pi, -1/3*pi, length=100)
-#       lines( cos(tmp.theta), sin(tmp.theta), col='grey', lwd=6 )
-#       tmp.theta <- seq(((((1-input$rel)*300)*0.0174532925)+5/3)*pi, 5/3*pi, length=100) #Conversion from degrees to radians = 0.0174532925 
-#       lines( cos(tmp.theta), sin(tmp.theta), col='grey', lwd=6 )
-#       tmp.theta <- seq(0,2*pi, length=360)
-#       lines( 1.025*cos(tmp.theta), 1.025*sin(tmp.theta) )
-#       tmp.theta <- (max-x)/(max-min) * 5/3*pi - pi/3
-#       polygon( c(.05, 1, 0.05) * cos( tmp.theta + c(-pi/2,0,pi/2) ),
-#                c(0.05, 1, 0.05) * sin( tmp.theta + c(-pi/2,0,pi/2) ),
-#                col='black')      
-# #      text( 0,-0.9, x )
-#     }
-#     dial(as.numeric(substr(toString(VULNERABILITY_PERC,cex=2),1,4))) 
-    
     dial <- function(x, min=0, max=1){
       old.par <- par(pty='s', lend=1)
       on.exit(par(old.par))
@@ -849,13 +750,11 @@ output$plot <- renderPlot({
       polygon( c(.05, 1, 0.05) * cos( tmp.theta + c(-pi/2,0,pi/2) ),
                c(0.05, 1, 0.05) * sin( tmp.theta + c(-pi/2,0,pi/2) ),
                col='black')      
-#      text( 0,-0.9, x )
     }
     dial(as.numeric(substr(toString(POR_RELIABILITY),1,4)))      
     
     plot(YEARS,PERCENT_OF_CAPACITY_ANNUAL_STORAGE,type="l",col="red",lwd=3,ylab="% Capacity (Annual Storage)",main=" STORAGE: % CAPACITY",ylim=c(0,100),cex.main=2,cex.axis=1.5,cex.lab=1.5)
     lines(YEARS,PERCENT_OF_CAPACITY_ANNUAL_STORAGE_BASE,lwd=3,col="black")
-    #lines(YEARS,rep(55,length(YEARS)),col="blue",lwd=3) #adds line based on UW highest level drought emergency line
     legend("bottomleft",c("BASE","CC"),lwd=c(2,2),lty=c(1,1),pch=c(-1,-1),col=c("black","red"))
 
     tt <- paste(MONTH_LIST[input$storage_month],"STORAGE=",round(CHANGING_ANNUAL_MONTHLY_STORAGE[input$storage_month,2],2),"\nBASE=",round(MONTHLY_CUR_STORAGE[input$storage_month,2],2),sep=" ")
@@ -908,13 +807,11 @@ output$plot <- renderPlot({
 	      polygon( c(.05, 1, 0.05) * cos( tmp.theta + c(-pi/2,0,pi/2) ),
 	               c(0.05, 1, 0.05) * sin( tmp.theta + c(-pi/2,0,pi/2) ),
 	               col='black')      
-	#      text( 0,-0.9, x )
 	      }	
 	    dial(as.numeric(substr(toString(POR_RELIABILITY),1,4)))      
 	    
 	    plot(YEARS,PERCENT_OF_CAPACITY_ANNUAL_STORAGE,type="l",col="red",lwd=3,ylab="% Capacity (Annual Storage)",main=" STORAGE: % CAPACITY",ylim=c(0,100),cex.main=1.5,cex.axis=1.5,cex.lab=1)
 	    lines(YEARS,PERCENT_OF_CAPACITY_ANNUAL_STORAGE_BASE,lwd=3,col="black")
-	    #lines(YEARS,rep(55,length(YEARS)),col="blue",lwd=3) #adds line based on UW highest level drought emergency line
 	    legend("bottomleft",c("BASE","CC"),lwd=c(2,2),lty=c(1,1),pch=c(-1,-1),col=c("black","red"))
 
 	    tt <- paste(MONTH_LIST[input$storage_month],"STORAGE=",round(CHANGING_ANNUAL_MONTHLY_STORAGE[input$storage_month,2],2),"\nBASE=",round(MONTHLY_CUR_STORAGE[input$storage_month,2],2),sep=" ")
@@ -931,8 +828,6 @@ output$plot <- renderPlot({
 
 		}
 	)
-
-
     
   })  
 #####################################################################################################################  
@@ -1009,7 +904,6 @@ output$summary <- renderPlot({
         WATER_SUPPLY <- WATER_SUPPLY_MONTHLY
         }
     
-	#swd <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/FINAL_INFLOWS/"
 	num_files <- length(list.files(pattern="INFLOWS_"))	
 	filenames <- list.files(pattern="INFLOWS_")
 
@@ -1062,9 +956,6 @@ if(input$Standard == FALSE){
       isolate({source("Hedge.r",local=TRUE)})
       HEDGE <- Hedge(num_year)
 
-      # isolate({source("~/ShinyApps/myapp/UW_Reservoir_Rules.r",local=TRUE)})
-      # HEDGE <- UW_Hedge(num_year)
-      
       STOR_NORM <- HEDGE[[1]]
       STOR_MOD <- HEDGE[[2]]
       
@@ -1195,7 +1086,6 @@ mean_temp_change_celsius <- unique(sort(rep(seq(0,5,by=0.5),11)))
 		xlabel <- "Precipitation Mean (% Change)"
 		ylabel <- "Temperature Mean Change (C)"
 		CONTOUR_VARIABLE <- POR_RELIABILITY
-		#zlim <- range(CONTOUR_VARIABLE, finite = TRUE)
     zlim <- c(0,1)
 		level <- pretty(zlim, n)
 		## Not taking into account threshold ##
@@ -1305,9 +1195,7 @@ output$probability <- renderPlot({
   WATER_SUPPLY <- WATER_SUPPLY_MONTHLY
   }
         
-    
-	#swd <- "/Users/Sarah/Dropbox/UMass_Research_PhD/2013_2014/ViRTUE/LOCAL_SCRIPTS/5_29_15/ShinyApps/myapp/FINAL_INFLOWS/"
-	num_files <- length(list.files(pattern="INFLOWS_"))	
+    num_files <- length(list.files(pattern="INFLOWS_"))	
 	filenames <- list.files(pattern="INFLOWS_")
 
 	PRCPP <- unique(rep(seq(0.75,1.25,by=.05),11))
@@ -1359,8 +1247,6 @@ if(input$Standard == FALSE){
        isolate({source("Hedge.r",local=TRUE)})
        HEDGE <- Hedge(num_year)
 
-      #isolate({source("~/ShinyApps/myapp/UW_Reservoir_Rules.r",local=TRUE)})
-      #HEDGE <- UW_Hedge(num_year)
       STOR_NORM <- HEDGE[[1]]
       STOR_MOD <- HEDGE[[2]]
 

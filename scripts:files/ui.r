@@ -50,7 +50,6 @@ tags$div(
         actionLink('clearMarkers', 'Clear markers')
         ),
         h4('Choose Location'),
-        #actionLink('randomLocation', 'Go to random location'),
         checkboxInput('addMarkerOnClick', 'Add marker on click', FALSE)
       ),
       col(
