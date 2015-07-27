@@ -36,7 +36,7 @@ devtools::install_github("trestletech/ShinyDash")
 devtools::install_github("rstudio/shinyapps")
 ```
 
-To obtain the ViRTUE source code, clone this repo using git, or [download the zip file](https://github.com/swhatele/ViRTUE/archive/master.zip) from the repo homepage on github and extract the files to some directory.
+To obtain the ViRTUE source code, clone this repo using git (`git clone https://github.com/swhatele/ViRTUE.git .`), or [download the zip file](https://github.com/swhatele/ViRTUE/archive/master.zip) from the repo homepage on github and extract the files to some directory.
 
 ## External Data
 
