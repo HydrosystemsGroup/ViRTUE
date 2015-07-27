@@ -2,7 +2,7 @@
 
 ViRTUE is an R/Shiny web application for assessing risks to small-scale water supply systems in the northeastern United States. The tool provides a mechanism to understand and explore individual water utilities climate risk exposure using a stress test, in which the performance of local reservoir systems is tested over a wide range of potential climate and socioeconomic changes.
 
-ViRTUE was developed by Sarah Whately and the [Hydrosystems Research Group](http://blogs.umass.edu/hydrosystems/) at UMass Amherst.
+ViRTUE was developed by Sarah Whateley and the [Hydrosystems Research Group](http://blogs.umass.edu/hydrosystems/) at UMass Amherst.
 
 ## Features
 
